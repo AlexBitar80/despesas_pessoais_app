@@ -12,9 +12,12 @@ class TransactionCardList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: transactions.map(
-        (transaction) {
+    return Container(
+      height: 500,
+      child: ListView.builder(
+        itemCount: transactions.length,
+        itemBuilder: (context, index) {
+          final transaction = transactions[index];
           return Card(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
@@ -58,7 +61,7 @@ class TransactionCardList extends StatelessWidget {
             ),
           );
         },
-      ).toList(),
+      ),
     );
   }
 }
