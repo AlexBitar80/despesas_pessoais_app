@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'components/transaction_card_list.dart';
 
 void main() {
-  runApp(const ExpensedApp());
+  runApp(const ExpensesApp());
 }
 
-class ExpensedApp extends StatelessWidget {
-  const ExpensedApp({
+class ExpensesApp extends StatelessWidget {
+  const ExpensesApp({
     super.key,
   });
 
@@ -61,6 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _transactions.add(newTransaction);
     });
+
+    Navigator.of(context).pop();
   }
 
   _openTransactionFormModal(BuildContext context) {
