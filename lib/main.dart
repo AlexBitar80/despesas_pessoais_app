@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'components/transaction_card_list.dart';
 
 void main() {
-  runApp(ExpensedApp());
+  runApp(const ExpensedApp());
 }
 
 class ExpensedApp extends StatelessWidget {

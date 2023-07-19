@@ -1,17 +1,22 @@
-import 'package:avoid_keyboard/avoid_keyboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class TransactionForm extends StatelessWidget {
-  final titleController = TextEditingController();
-  final valueController = TextEditingController();
-
+class TransactionForm extends StatefulWidget {
   final void Function(String, double) onSubmit;
 
-  TransactionForm({
+  const TransactionForm({
     super.key,
     required this.onSubmit,
   });
+
+  @override
+  State<TransactionForm> createState() => _TransactionFormState();
+}
+
+class _TransactionFormState extends State<TransactionForm> {
+  final titleController = TextEditingController();
+
+  final valueController = TextEditingController();
 
   _onSubmitForm() {
     final title = titleController.text;
@@ -21,14 +26,17 @@ class TransactionForm extends StatelessWidget {
       return;
     }
 
-    onSubmit(title, value);
+    widget.onSubmit(title, value);
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 260,
-      child: AvoidKeyboard(
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: SizedBox(
+        height: 250,
         child: Column(
           children: [
             Padding(
@@ -38,8 +46,11 @@ class TransactionForm extends StatelessWidget {
               child: SvgPicture.asset('assets/images/line_modal.svg'),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
+              padding: const EdgeInsets.only(
+                top: 20.0,
+                left: 10.0,
+                right: 10.0,
+              ),
               child: Column(
                 children: <Widget>[
                   TextField(
