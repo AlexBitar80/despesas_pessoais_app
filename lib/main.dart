@@ -1,17 +1,38 @@
-import 'package:despesas_pessoais/components/transaction_card.dart';
+import 'package:despesas_pessoais/components/transaction_form.dart';
 import 'package:despesas_pessoais/models/transaction.dart';
 import 'package:flutter/material.dart';
 
+import 'components/transaction_card_list.dart';
+
 void main() {
-  runApp(MyApp());
+  runApp(const ExpensesApp());
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({
+class ExpensesApp extends StatelessWidget {
+  const ExpensesApp({
     super.key,
   });
 
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({
+    super.key,
+  });
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   final titleController = TextEditingController();
+
   final valueController = TextEditingController();
 
   final _transactions = <Transaction>[
@@ -27,91 +48,69 @@ class MyApp extends StatelessWidget {
       amount: 211.30,
       date: DateTime.now(),
     ),
-    Transaction(
-      id: 't3',
-      title: 'Conta de Água',
-      amount: 211.30,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't4',
-      title: 'Conta de Telefone',
-      amount: 211.30,
-      date: DateTime.now(),
-    ),
   ];
+
+  _addTransaction(String title, double amount) {
+    final newTransaction = Transaction(
+      id: DateTime.now().toString(),
+      title: title,
+      amount: amount,
+      date: DateTime.now(),
+    );
+
+    setState(() {
+      _transactions.add(newTransaction);
+    });
+
+    Navigator.of(context).pop();
+  }
+
+  _openTransactionFormModal(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10.0),
+          topRight: Radius.circular(10.0),
+        ),
+      ),
+      context: context,
+      builder: (_) {
+        return TransactionForm(
+          onSubmit: _addTransaction,
+        );
+      },
+    );
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Despesas Pessoais'),
-        ),
-        body: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              const Card(
-                color: Colors.blue,
-                child: Text('Gráfico'),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: _transactions
-                    .map(
-                      (transaction) => TransactionCard(
-                        title: transaction.title,
-                        amount: transaction.amount,
-                        date: transaction.date,
-                      ),
-                    )
-                    .toList(),
-              ),
-              Card(
-                elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: <Widget>[
-                      TextField(
-                        controller: titleController,
-                        decoration: const InputDecoration(
-                          labelText: 'Título',
-                        ),
-                      ),
-                      TextField(
-                        controller: valueController,
-                        decoration: const InputDecoration(
-                          labelText: 'Valor (R\$)',
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            child: const Text(
-                              'Nova Transação',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            onPressed: () => {
-                              print(titleController.text),
-                              print(valueController.text),
-                            },
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              )
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Despesas Pessoais'),
+        actions: [
+          IconButton(
+            onPressed: () => _openTransactionFormModal(context),
+            icon: const Icon(Icons.add),
           ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            const Card(
+              color: Colors.blue,
+              child: Text('Gráfico'),
+            ),
+            TransactionCardList(transactions: _transactions),
+          ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () => _openTransactionFormModal(context),
       ),
     );
   }
