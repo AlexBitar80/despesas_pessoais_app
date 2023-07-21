@@ -30,10 +30,10 @@ class TransactionCardList extends StatelessWidget {
                     ),
                     child: Text(
                       'R\$ ${transaction.amount.toStringAsFixed(2)}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14.0,
-                        color: Colors.purple,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),
