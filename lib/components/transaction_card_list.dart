@@ -23,14 +23,19 @@ class TransactionCardList extends StatelessWidget {
       child: transactions.isEmpty
           ? Column(
               children: <Widget>[
-                const SizedBox(height: 28),
+                const SizedBox(
+                  height: 32,
+                ),
                 Text(
                   'Nenhuma transação cadastrada!',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
+                const SizedBox(
+                  height: 28,
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.4,
-                  width: MediaQuery.of(context).size.width - 40,
+                  width: MediaQuery.of(context).size.width - 30,
                   child: SvgPicture.asset(waintingImage),
                 ),
                 const Spacer(),
@@ -51,7 +56,7 @@ class TransactionCardList extends StatelessWidget {
                             vertical: 10,
                           ),
                           child: Text(
-                            'R\$ ${transaction.amount.toStringAsFixed(2)}',
+                            'R\$ ${transaction.amount}',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14.0,

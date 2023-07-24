@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TransactionForm extends StatefulWidget {
-  final void Function(String, double) onSubmit;
+  final void Function(String, String) onSubmit;
 
   const TransactionForm({
     super.key,
@@ -20,9 +20,9 @@ class _TransactionFormState extends State<TransactionForm> {
 
   _onSubmitForm() {
     final title = titleController.text;
-    final value = double.tryParse(valueController.text) ?? 0.0;
+    final value = valueController.text;
 
-    if (title.isEmpty || value <= 0) {
+    if (title.isEmpty || value.isEmpty) {
       return;
     }
 
@@ -64,11 +64,11 @@ class _TransactionFormState extends State<TransactionForm> {
                     onSubmitted: (_) => _onSubmitForm(),
                     controller: valueController,
                     keyboardType: const TextInputType.numberWithOptions(
-                      signed: true,
                       decimal: true,
                     ),
                     decoration: const InputDecoration(
                       labelText: 'Valor (R\$)',
+                      prefixText: 'R\$ ',
                     ),
                   ),
                   const SizedBox(height: 10),
