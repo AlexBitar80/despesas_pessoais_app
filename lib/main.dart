@@ -74,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // ),
   ];
 
-  _addTransaction(String title, double amount) {
+  _addTransaction(String title, String amount) {
     final newTransaction = Transaction(
       id: DateTime.now().toString(),
       title: title,
