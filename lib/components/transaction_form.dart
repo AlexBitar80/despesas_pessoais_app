@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class TransactionForm extends StatefulWidget {
   final void Function(String, double) onSubmit;
@@ -14,19 +16,49 @@ class TransactionForm extends StatefulWidget {
 }
 
 class _TransactionFormState extends State<TransactionForm> {
-  final titleController = TextEditingController();
-
-  final valueController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _valueController = TextEditingController();
+  DateTime? _selectedDate = DateTime.now();
 
   _onSubmitForm() {
-    final title = titleController.text;
-    final value = double.tryParse(valueController.text) ?? 0;
+    final title = _titleController.text;
+    final value = double.tryParse(_valueController.text) ?? 0;
 
     if (title.isEmpty || value <= 0) {
       return;
     }
 
     widget.onSubmit(title, value);
+  }
+
+  void _showDialog(Widget child) {
+    showCupertinoModalPopup<DateTime>(
+      context: context,
+      builder: (BuildContext context) => Container(
+        height: 216,
+        padding: const EdgeInsets.only(top: 6.0),
+        // The Bottom margin is provided to align the popup above the system
+        // navigation bar.
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        // Provide a background color for the popup.
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        // Use a SafeArea widget to avoid system overlaps.
+        child: SafeArea(
+          top: false,
+          child: child,
+        ),
+      ),
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+
+      setState(() {
+        _selectedDate = pickedDate;
+      });
+    });
   }
 
   @override
@@ -36,7 +68,7 @@ class _TransactionFormState extends State<TransactionForm> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: SizedBox(
-        height: 250,
+        height: 320,
         child: Column(
           children: [
             Padding(
@@ -55,14 +87,14 @@ class _TransactionFormState extends State<TransactionForm> {
                 children: <Widget>[
                   TextField(
                     onSubmitted: (_) => _onSubmitForm(),
-                    controller: titleController,
+                    controller: _titleController,
                     decoration: const InputDecoration(
                       labelText: 'Título',
                     ),
                   ),
                   TextField(
                     onSubmitted: (_) => _onSubmitForm(),
-                    controller: valueController,
+                    controller: _valueController,
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
                     ),
@@ -71,20 +103,51 @@ class _TransactionFormState extends State<TransactionForm> {
                       prefixText: 'R\$ ',
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: _onSubmitForm,
-                        child: const Text(
-                          'Nova Transação',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 14,
+                      horizontal: 10,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            _selectedDate == null
+                                ? 'Nenhuma data selecionada:'
+                                : 'Data selecionada: ${DateFormat('dd/MM/y').format(
+                                    _selectedDate ?? DateTime.now(),
+                                  )}',
                           ),
                         ),
+                        TextButton(
+                          child: const Text('Selecionar data'),
+                          onPressed: () => _showDialog(
+                            CupertinoDatePicker(
+                              initialDateTime: DateTime.now(),
+                              maximumDate: DateTime.now(),
+                              minimumDate: DateTime(2020),
+                              mode: CupertinoDatePickerMode.date,
+                              use24hFormat: true,
+                              showDayOfWeek: true,
+                              onDateTimeChanged: (DateTime newDate) {
+                                setState(() => _selectedDate = newDate);
+                              },
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SafeArea(
+                    child: CupertinoButton.filled(
+                      onPressed: _onSubmitForm,
+                      child: const Text(
+                        'Nova Transação',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ],
+                    ),
                   )
                 ],
               ),
