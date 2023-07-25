@@ -1,6 +1,7 @@
 import 'package:despesas_pessoais/models/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class TransactionCardList extends StatelessWidget {
   final List<Transaction> transactions;
@@ -52,7 +53,7 @@ class TransactionCardList extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                      vertical: 8,
+                      vertical: 4,
                     ),
                     child: ListTile(
                       leading: CircleAvatar(
@@ -67,9 +68,24 @@ class TransactionCardList extends StatelessWidget {
                           ),
                         ),
                       ),
-                      title: Text(
-                        transaction.title,
-                        style: Theme.of(context).textTheme.titleLarge,
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            transaction.title,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            DateFormat('d MMM y').format(transaction.date),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 15.0,
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
