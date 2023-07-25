@@ -1,3 +1,4 @@
+import 'package:despesas_pessoais/components/chart_transactions.dart';
 import 'package:despesas_pessoais/components/transaction_form.dart';
 import 'package:despesas_pessoais/models/transaction.dart';
 import 'package:flutter/material.dart';
@@ -60,21 +61,51 @@ class _MyHomePageState extends State<MyHomePage> {
   final valueController = TextEditingController();
 
   final List<Transaction> _transactions = <Transaction>[
-    // Transaction(
-    //   id: 't1',
-    //   title: 'Novo Tênis de Corrida',
-    //   amount: 310.76,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: 't2',
-    //   title: 'Conta de Luz',
-    //   amount: 211.30,
-    //   date: DateTime.now(),
-    // ),
+    Transaction(
+      id: 't0',
+      title: 'Novo controle de PS4',
+      amount: 400.00,
+      date: DateTime.now().subtract(
+        const Duration(
+          days: 2,
+        ),
+      ),
+    ),
+    Transaction(
+      id: 't1',
+      title: 'Novo Tênis de Corrida',
+      amount: 310.76,
+      date: DateTime.now().subtract(
+        const Duration(
+          days: 3,
+        ),
+      ),
+    ),
+    Transaction(
+      id: 't2',
+      title: 'Conta de Luz',
+      amount: 320.76,
+      date: DateTime.now().subtract(
+        const Duration(
+          days: 4,
+        ),
+      ),
+    ),
   ];
 
-  _addTransaction(String title, String amount) {
+  List<Transaction> get _recentTransactions {
+    return _transactions.where((transaction) {
+      return transaction.date.isAfter(
+        DateTime.now().subtract(
+          const Duration(
+            days: 7,
+          ),
+        ),
+      );
+    }).toList();
+  }
+
+  _addTransaction(String title, double amount) {
     final newTransaction = Transaction(
       id: DateTime.now().toString(),
       title: title,
@@ -124,10 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const Card(
-              color: Colors.blue,
-              child: Text('Gráfico'),
-            ),
+            ChartTransactions(recentTransaction: _recentTransactions),
             TransactionCardList(transactions: _transactions),
           ],
         ),

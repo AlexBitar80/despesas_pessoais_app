@@ -56,7 +56,7 @@ class TransactionCardList extends StatelessWidget {
                             vertical: 10,
                           ),
                           child: Text(
-                            'R\$ ${transaction.amount}',
+                            'R\$ ${transaction.amount.toStringAsFixed(2)}',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14.0,
