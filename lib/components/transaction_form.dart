@@ -1,5 +1,7 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
@@ -20,11 +22,17 @@ class _TransactionFormState extends State<TransactionForm> {
   final _valueController = TextEditingController();
   DateTime? _selectedDate = DateTime.now();
 
+  double toDouble(String string) {
+    final RegExp regExp = RegExp(r'\d+.\d{2}');
+    final String text = regExp.stringMatch(string)!;
+    return double.parse(text.replaceAll(',', '.'));
+  }
+
   _onSubmitForm() {
     final title = _titleController.text;
-    final value = double.tryParse(_valueController.text) ?? 0;
+    final value = toDouble(_valueController.text);
 
-    if (title.isEmpty || value <= 0 || _selectedDate == null) {
+    if (title.isEmpty || value <= 0.0 || _selectedDate == null) {
       return;
     }
 
@@ -41,14 +49,10 @@ class _TransactionFormState extends State<TransactionForm> {
       builder: (BuildContext context) => Container(
         height: 216,
         padding: const EdgeInsets.only(top: 6.0),
-        // The Bottom margin is provided to align the popup above the system
-        // navigation bar.
         margin: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-        // Provide a background color for the popup.
         color: CupertinoColors.systemBackground.resolveFrom(context),
-        // Use a SafeArea widget to avoid system overlaps.
         child: SafeArea(
           top: false,
           child: child,
@@ -99,9 +103,11 @@ class _TransactionFormState extends State<TransactionForm> {
                   TextField(
                     onSubmitted: (_) => _onSubmitForm(),
                     controller: _valueController,
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
+                    keyboardType: const TextInputType.numberWithOptions(),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CentavosInputFormatter(),
+                    ],
                     decoration: const InputDecoration(
                       labelText: 'Valor (R\$)',
                       prefixText: 'R\$ ',

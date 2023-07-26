@@ -19,7 +19,9 @@ class ChartTransactionBar extends StatelessWidget {
         SizedBox(
           height: 20,
           child: FittedBox(
-            child: Text('R\$${value.toStringAsFixed(2)}'),
+            child: Text(
+              'R\$${value.toStringAsFixed(2)}',
+            ),
           ),
         ),
         const SizedBox(
