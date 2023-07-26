@@ -46,7 +46,7 @@ class TransactionCardList extends StatelessWidget {
               itemBuilder: (context, index) {
                 final transaction = transactions[index];
                 return Card(
-                  elevation: 5,
+                  elevation: 1,
                   margin: const EdgeInsets.symmetric(
                     horizontal: 5,
                     vertical: 5,
