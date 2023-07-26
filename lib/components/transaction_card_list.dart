@@ -5,11 +5,13 @@ import 'package:intl/intl.dart';
 
 class TransactionCardList extends StatelessWidget {
   final List<Transaction> transactions;
+  final void Function(String) onRemove;
   final String waintingImage = 'assets/images/waiting.svg';
 
   const TransactionCardList({
     super.key,
     required this.transactions,
+    required this.onRemove,
   });
 
   @override
@@ -86,6 +88,11 @@ class TransactionCardList extends StatelessWidget {
                             ),
                           )
                         ],
+                      ),
+                      trailing: IconButton(
+                        onPressed: () => onRemove(transaction.id),
+                        icon: const Icon(Icons.delete),
+                        color: Theme.of(context).colorScheme.errorContainer,
                       ),
                     ),
                   ),
