@@ -60,27 +60,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final valueController = TextEditingController();
 
-  final List<Transaction> _transactions = <Transaction>[
-    Transaction(
-      id: 't1',
-      title: 'Novo Tênis de Corrida',
-      amount: 310.76,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Conta de Luz',
-      amount: 211.30,
-      date: DateTime.now(),
-    ),
-  ];
+  final List<Transaction> _transactions = <Transaction>[];
 
-  _addTransaction(String title, double amount) {
+  _addTransaction(String title, double amount, DateTime date) {
     final newTransaction = Transaction(
       id: DateTime.now().toString(),
       title: title,
       amount: amount,
-      date: DateTime.now(),
+      date: date,
     );
 
     setState(() {
@@ -106,6 +93,18 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
+  }
+
+  List<Transaction> get _recentTransactions {
+    return _transactions.where((transaction) {
+      return transaction.date.isAfter(
+        DateTime.now().subtract(
+          const Duration(
+            days: 7,
+          ),
+        ),
+      );
+    }).toList();
   }
 
   // This widget is the root of your application.
