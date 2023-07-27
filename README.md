@@ -1,3 +1,5 @@
+![image_logo](https://github.com/AlexBitar80/despesas_pessoais_app/assets/56983783/dddba3cc-50fc-470f-8360-5ca0a46fbf2f)
+
 ## Despesas pessoais App
 
 #### App de despesas pessoais feito em Flutter para estudo.
