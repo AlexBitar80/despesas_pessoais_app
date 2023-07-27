@@ -1,16 +1,28 @@
-# despesas_pessoais
+![image_logo](https://github.com/AlexBitar80/despesas_pessoais_app/assets/56983783/dddba3cc-50fc-470f-8360-5ca0a46fbf2f)
 
-A new Flutter project.
+## Despesas pessoais App
 
-## Getting Started
+#### App de despesas pessoais feito em Flutter para estudo.
 
-This project is a starting point for a Flutter application.
+- Permite adicionar e remover transações 
+- Permite visualizar os gastos da semana com base em um gráfico
 
-A few resources to get you started if this is your first Flutter project:
+##### Fazer o clone do projeto em uma pasta de preferência
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```bash
+$ git clone https://github.com/AlexBitar80/despesas_pessoais_app
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+##### Após fazer o clone, acesse a pasta do projeto no terminal e rode o seguinte comando para instalar as dependências
+
+```bash
+$ flutter pub get
+```
+
+##### Estando com um simulador ```Android``` ou ```ìOS```, rode o seguinte comando para executar o projeto:
+
+```bash
+$ flutter run
+```
+
+#### let's code!! 🚀
