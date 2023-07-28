@@ -60,7 +60,58 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final valueController = TextEditingController();
 
-  final List<Transaction> _transactions = <Transaction>[];
+  final List<Transaction> _transactions = <Transaction>[
+    Transaction(
+      id: 't1',
+      title: 'Novo Tênis de Corrida',
+      amount: 310.76,
+      date: DateTime.now().subtract(
+        const Duration(
+          days: 3,
+        ),
+      ),
+    ),
+    Transaction(
+      id: 't2',
+      title: 'Conta de Luz',
+      amount: 211.30,
+      date: DateTime.now().subtract(
+        const Duration(
+          days: 4,
+        ),
+      ),
+    ),
+    Transaction(
+      id: 't3',
+      title: 'Conta de Água',
+      amount: 211.30,
+      date: DateTime.now().subtract(
+        const Duration(
+          days: 5,
+        ),
+      ),
+    ),
+    Transaction(
+      id: 't4',
+      title: 'Conta de Internet',
+      amount: 211.30,
+      date: DateTime.now().subtract(
+        const Duration(
+          days: 6,
+        ),
+      ),
+    ),
+    Transaction(
+      id: 't5',
+      title: 'Conta de Telefone',
+      amount: 211.30,
+      date: DateTime.now().subtract(
+        const Duration(
+          days: 7,
+        ),
+      ),
+    ),
+  ];
 
   _addTransaction(String title, double amount, DateTime date) {
     final newTransaction = Transaction(
@@ -118,24 +169,36 @@ class _MyHomePageState extends State<MyHomePage> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: const Text('Despesas Pessoais'),
+      actions: [
+        IconButton(
+          onPressed: () => _openTransactionFormModal(context),
+          icon: const Icon(Icons.add),
+        ),
+      ],
+    );
+
+    final availbaleHeiht = MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Despesas Pessoais'),
-        actions: [
-          IconButton(
-            onPressed: () => _openTransactionFormModal(context),
-            icon: const Icon(Icons.add),
-          ),
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            ChartTransactions(recentTransaction: _recentTransactions),
-            TransactionCardList(
-              transactions: _transactions,
-              onRemove: _removeTransaction,
+            SizedBox(
+              height: availbaleHeiht * 0.25,
+              child: ChartTransactions(recentTransaction: _recentTransactions),
+            ),
+            SizedBox(
+              height: availbaleHeiht * 0.75,
+              child: TransactionCardList(
+                transactions: _transactions,
+                onRemove: _removeTransaction,
+              ),
             ),
           ],
         ),
