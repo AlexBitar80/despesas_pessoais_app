@@ -59,59 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final titleController = TextEditingController();
 
   final valueController = TextEditingController();
+  bool _showChart = false;
 
-  final List<Transaction> _transactions = <Transaction>[
-    Transaction(
-      id: 't1',
-      title: 'Novo Tênis de Corrida',
-      amount: 310.76,
-      date: DateTime.now().subtract(
-        const Duration(
-          days: 3,
-        ),
-      ),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Conta de Luz',
-      amount: 211.30,
-      date: DateTime.now().subtract(
-        const Duration(
-          days: 4,
-        ),
-      ),
-    ),
-    Transaction(
-      id: 't3',
-      title: 'Conta de Água',
-      amount: 211.30,
-      date: DateTime.now().subtract(
-        const Duration(
-          days: 5,
-        ),
-      ),
-    ),
-    Transaction(
-      id: 't4',
-      title: 'Conta de Internet',
-      amount: 211.30,
-      date: DateTime.now().subtract(
-        const Duration(
-          days: 6,
-        ),
-      ),
-    ),
-    Transaction(
-      id: 't5',
-      title: 'Conta de Telefone',
-      amount: 211.30,
-      date: DateTime.now().subtract(
-        const Duration(
-          days: 7,
-        ),
-      ),
-    ),
-  ];
+  final List<Transaction> _transactions = <Transaction>[];
 
   _addTransaction(String title, double amount, DateTime date) {
     final newTransaction = Transaction(
@@ -179,6 +129,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
 
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     final availbaleHeiht = MediaQuery.of(context).size.height -
         appBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
@@ -186,21 +139,41 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            SizedBox(
-              height: availbaleHeiht * 0.25,
-              child: ChartTransactions(recentTransaction: _recentTransactions),
-            ),
-            SizedBox(
-              height: availbaleHeiht * 0.75,
-              child: TransactionCardList(
-                transactions: _transactions,
-                onRemove: _removeTransaction,
-              ),
-            ),
-          ],
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              if (isLandscape)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Text('Exibir Gráfico'),
+                    Switch(
+                      value: _showChart,
+                      onChanged: (value) {
+                        setState(() {
+                          _showChart = value;
+                        });
+                      },
+                    )
+                  ],
+                ),
+              if (_showChart || !isLandscape)
+                SizedBox(
+                  height: availbaleHeiht * (isLandscape ? 0.50 : 0.25),
+                  child:
+                      ChartTransactions(recentTransaction: _recentTransactions),
+                ),
+              if (!_showChart || !isLandscape)
+                SizedBox(
+                  height: availbaleHeiht * 0.75,
+                  child: TransactionCardList(
+                    transactions: _transactions,
+                    onRemove: _removeTransaction,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

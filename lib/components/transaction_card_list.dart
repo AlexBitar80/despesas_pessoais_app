@@ -23,25 +23,29 @@ class TransactionCardList extends StatelessWidget {
           appBarHeight -
           MediaQuery.of(context).padding.top,
       child: transactions.isEmpty
-          ? Column(
-              children: <Widget>[
-                const SizedBox(
-                  height: 32,
-                ),
-                Text(
-                  'Nenhuma transação cadastrada!',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(
-                  height: 28,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  width: MediaQuery.of(context).size.width - 30,
-                  child: SvgPicture.asset(waintingImage),
-                ),
-                const Spacer(),
-              ],
+          ? LayoutBuilder(
+              builder: (context, constraints) {
+                return Column(
+                  children: <Widget>[
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'Nenhuma transação cadastrada!',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: constraints.maxHeight * 0.6,
+                      width: MediaQuery.of(context).size.width - 30,
+                      child: SvgPicture.asset(waintingImage),
+                    ),
+                    const Spacer(),
+                  ],
+                );
+              },
             )
           : ListView.builder(
               itemCount: transactions.length,
