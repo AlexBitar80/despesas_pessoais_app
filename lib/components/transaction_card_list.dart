@@ -93,11 +93,23 @@ class TransactionCardList extends StatelessWidget {
                           )
                         ],
                       ),
-                      trailing: IconButton(
-                        onPressed: () => onRemove(transaction.id),
-                        icon: const Icon(Icons.delete),
-                        color: Theme.of(context).colorScheme.errorContainer,
-                      ),
+                      trailing: MediaQuery.of(context).size.width > 480
+                          ? TextButton.icon(
+                              onPressed: () => onRemove(transaction.id),
+                              icon: const Icon(Icons.delete),
+                              label: const Text('Excluir'),
+                              style: TextButton.styleFrom(
+                                foregroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .errorContainer,
+                              ),
+                            )
+                          : IconButton(
+                              onPressed: () => onRemove(transaction.id),
+                              icon: const Icon(Icons.delete),
+                              color:
+                                  Theme.of(context).colorScheme.errorContainer,
+                            ),
                     ),
                   ),
                 );
