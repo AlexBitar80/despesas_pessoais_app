@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:despesas_pessoais/components/adaptative_button.dart';
+import 'package:despesas_pessoais/components/adaptative_date_picker.dart';
+import 'package:despesas_pessoais/components/adaptative_texfield.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 
 class TransactionForm extends StatefulWidget {
   final void Function(String, double, DateTime) onSubmit;
@@ -43,32 +47,6 @@ class _TransactionFormState extends State<TransactionForm> {
     );
   }
 
-  void _showDialog(Widget child) {
-    showCupertinoModalPopup<DateTime>(
-      context: context,
-      builder: (BuildContext context) => Container(
-        height: 216,
-        padding: const EdgeInsets.only(top: 6.0),
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        color: CupertinoColors.systemBackground.resolveFrom(context),
-        child: SafeArea(
-          top: false,
-          child: child,
-        ),
-      ),
-    ).then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      }
-
-      setState(() {
-        _selectedDate = pickedDate;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -76,7 +54,7 @@ class _TransactionFormState extends State<TransactionForm> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: SizedBox(
-        height: 320,
+        height: Platform.isIOS ? 370 : 320,
         child: Column(
           children: [
             Padding(
@@ -93,70 +71,39 @@ class _TransactionFormState extends State<TransactionForm> {
               ),
               child: Column(
                 children: <Widget>[
-                  TextField(
+                  AdaptativeTextfield(
                     onSubmitted: (_) => _onSubmitForm(),
                     controller: _titleController,
-                    decoration: const InputDecoration(
-                      labelText: 'Título',
-                    ),
+                    titleLabel: 'Título',
                   ),
-                  TextField(
+                  AdaptativeTextfield(
                     onSubmitted: (_) => _onSubmitForm(),
                     controller: _valueController,
+                    titleLabel: 'Valor (R\$)',
                     keyboardType: const TextInputType.numberWithOptions(),
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
-                      CentavosInputFormatter(),
+                      CentavosInputFormatter(
+                        moeda: Platform.isIOS ? true : false,
+                      ),
                     ],
-                    decoration: const InputDecoration(
-                      labelText: 'Valor (R\$)',
-                      prefixText: 'R\$ ',
-                    ),
+                    prefix: 'R\$ ',
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 14,
-                      horizontal: 10,
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            _selectedDate == null
-                                ? 'Nenhuma data selecionada:'
-                                : 'Data selecionada: ${DateFormat('dd/MM/y').format(
-                                    _selectedDate ?? DateTime.now(),
-                                  )}',
-                          ),
-                        ),
-                        TextButton(
-                          child: const Text('Selecionar data'),
-                          onPressed: () => _showDialog(
-                            CupertinoDatePicker(
-                              initialDateTime: DateTime.now(),
-                              maximumDate: DateTime.now(),
-                              minimumDate: DateTime(2020),
-                              mode: CupertinoDatePickerMode.date,
-                              use24hFormat: true,
-                              showDayOfWeek: true,
-                              onDateTimeChanged: (DateTime newDate) {
-                                setState(() => _selectedDate = newDate);
-                              },
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                  AdaptativeDatePicker(
+                    selectedDate: _selectedDate ?? DateTime.now(),
+                    onDateChanged: (newDate) {
+                      setState(() {
+                        _selectedDate = newDate;
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 8,
                   ),
                   SafeArea(
-                    child: CupertinoButton.filled(
+                    child: AdaptativeButton(
+                      label: "Nova transação",
                       onPressed: _onSubmitForm,
-                      child: const Text(
-                        'Nova Transação',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                     ),
                   )
                 ],
