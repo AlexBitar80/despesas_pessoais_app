@@ -17,11 +17,10 @@ class TransactionCardList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appBarHeight = AppBar().preferredSize.height;
+    final mediaQuery = MediaQuery.of(context);
 
     return SizedBox(
-      height: MediaQuery.of(context).size.height -
-          appBarHeight -
-          MediaQuery.of(context).padding.top,
+      height: mediaQuery.size.height - appBarHeight - mediaQuery.padding.top,
       child: transactions.isEmpty
           ? LayoutBuilder(
               builder: (context, constraints) {
@@ -39,7 +38,7 @@ class TransactionCardList extends StatelessWidget {
                     ),
                     SizedBox(
                       height: constraints.maxHeight * 0.6,
-                      width: MediaQuery.of(context).size.width - 30,
+                      width: mediaQuery.size.width - 30,
                       child: SvgPicture.asset(waintingImage),
                     ),
                     const Spacer(),
@@ -93,7 +92,7 @@ class TransactionCardList extends StatelessWidget {
                           )
                         ],
                       ),
-                      trailing: MediaQuery.of(context).size.width > 480
+                      trailing: mediaQuery.size.width > 480
                           ? TextButton.icon(
                               onPressed: () => onRemove(transaction.id),
                               icon: const Icon(Icons.delete),
