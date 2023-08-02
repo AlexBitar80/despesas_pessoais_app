@@ -17,31 +17,34 @@ class TransactionCardList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appBarHeight = AppBar().preferredSize.height;
+    final mediaQuery = MediaQuery.of(context);
 
     return SizedBox(
-      height: MediaQuery.of(context).size.height -
-          appBarHeight -
-          MediaQuery.of(context).padding.top,
+      height: mediaQuery.size.height - appBarHeight - mediaQuery.padding.top,
       child: transactions.isEmpty
-          ? Column(
-              children: <Widget>[
-                const SizedBox(
-                  height: 32,
-                ),
-                Text(
-                  'Nenhuma transação cadastrada!',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(
-                  height: 28,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  width: MediaQuery.of(context).size.width - 30,
-                  child: SvgPicture.asset(waintingImage),
-                ),
-                const Spacer(),
-              ],
+          ? LayoutBuilder(
+              builder: (context, constraints) {
+                return Column(
+                  children: <Widget>[
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'Nenhuma transação cadastrada!',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: constraints.maxHeight * 0.6,
+                      width: mediaQuery.size.width - 30,
+                      child: SvgPicture.asset(waintingImage),
+                    ),
+                    const Spacer(),
+                  ],
+                );
+              },
             )
           : ListView.builder(
               itemCount: transactions.length,
@@ -89,11 +92,23 @@ class TransactionCardList extends StatelessWidget {
                           )
                         ],
                       ),
-                      trailing: IconButton(
-                        onPressed: () => onRemove(transaction.id),
-                        icon: const Icon(Icons.delete),
-                        color: Theme.of(context).colorScheme.errorContainer,
-                      ),
+                      trailing: mediaQuery.size.width > 480
+                          ? TextButton.icon(
+                              onPressed: () => onRemove(transaction.id),
+                              icon: const Icon(Icons.delete),
+                              label: const Text('Excluir'),
+                              style: TextButton.styleFrom(
+                                foregroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .errorContainer,
+                              ),
+                            )
+                          : IconButton(
+                              onPressed: () => onRemove(transaction.id),
+                              icon: const Icon(Icons.delete),
+                              color:
+                                  Theme.of(context).colorScheme.errorContainer,
+                            ),
                     ),
                   ),
                 );
