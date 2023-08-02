@@ -148,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final PreferredSizeWidget appBar = Platform.isIOS
         ? CupertinoNavigationBar(
-            middle: const Text('despesas pessoais'),
+            middle: const Text('Despesas pessoais'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: actions,
