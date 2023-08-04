@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AdaptativeDatePicker extends StatelessWidget {
-  final DateTime selectedDate;
+  final DateTime? selectedDate;
   final Function(DateTime) onDateChanged;
 
   const AdaptativeDatePicker({
@@ -54,7 +54,7 @@ class AdaptativeDatePicker extends StatelessWidget {
                     selectedDate == null
                         ? 'Nenhuma data selecionada:'
                         : 'Data selecionada: ${DateFormat('dd/MM/y').format(
-                            selectedDate,
+                            selectedDate ?? DateTime.now(),
                           )}',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
