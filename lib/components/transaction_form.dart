@@ -87,7 +87,7 @@ class _TransactionFormState extends State<TransactionForm> {
                         moeda: Platform.isIOS ? true : false,
                       ),
                     ],
-                    prefix: 'R\$ ',
+                    prefix: Platform.isIOS ? '' : 'R\$ ',
                   ),
                   AdaptativeDatePicker(
                     selectedDate: _selectedDate ?? DateTime.now(),
